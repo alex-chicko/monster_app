@@ -2,7 +2,7 @@
 import React,{useState, useEffect} from 'react';
 import CardList from './components/card-list/CardList';
 import './App.css';
-
+import {SearchBox} from './components/search-box/SearchBox';
 const  App = (props) => {
 
   const [monstersState, setMonstersState] = useState({
@@ -10,7 +10,9 @@ const  App = (props) => {
     
   }) 
 
-
+  const [searchState, setSearchState]  = useState({
+    searchfield:''
+     })
   useEffect(() => {
   //  console.log('alex')
  //   if(monstersState.monsters.length<1)
@@ -20,19 +22,24 @@ const  App = (props) => {
    
   },[])
   
+  const handleChange = (e) => {
+     setSearchState({
+      searchfield:e.target.value
+           })}
+  
 
-  const allMonsters = monstersState.monsters.map(monster =>{
-    return <h1 key={monster.id}>{monster.name}</h1>;
-  });
+  const monsters = monstersState.monsters;
+  const searchfield =searchState.searchfield;
+  const filteredMonsters = monsters.filter(monster =>{
+    return  monster.name.toLowerCase().includes(searchfield.toLowerCase());}
 
+    )
   return (
     <div className="App">
-      <CardList monsters={monstersState.monsters} >
-      {
-        allMonsters
-      }
-      </CardList>
-  
+      <h1>Monsters Rolodex</h1>
+      <SearchBox placeholder='search monsters' onhandlechange={handleChange}/>
+      <CardList monsters={filteredMonsters}/>
+      
     </div>
   );
 }
